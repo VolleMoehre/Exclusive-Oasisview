@@ -15,10 +15,18 @@ public class CountBuildings : MonoBehaviour
     public Material otherSkybox;
     public Transform buildingContainer;
     public GameObject Pfeil;
+    AudioSource Citysound;
+    float CitysoundVolume;
+    public string Endscene;
+    public Color loadToColor = Color.black;
 
 
     void Start()
     {
+        CitysoundVolume = 0.5f;
+        Citysound = GetComponent<AudioSource>();
+        Citysound.Play();
+
 
     }
 
@@ -34,20 +42,16 @@ public class CountBuildings : MonoBehaviour
         count++;
         buildingText.text = "Building: " + count;
 
+        CitysoundVolume = count / 10;
+        Citysound.volume = CitysoundVolume;
+
         if (count == 2)
         {
             Destroy(Pfeil.gameObject, 1f);
         }
 
-        if (count > 80)
-        {
-            RenderSettings.skybox = otherSkybox;
-            FindObjectOfType<AudioManager>().PlayOneShot("succsess");
-
-
-        }
-
-        if (count > 150)
+        /*
+        if (count > 2)
         {
             StartCoroutine(resetLevel());
         }
@@ -56,6 +60,7 @@ public class CountBuildings : MonoBehaviour
         //{
         //    StartCoroutine(resetLevel());
         //}
+        */
 
     }
 
@@ -66,18 +71,11 @@ public class CountBuildings : MonoBehaviour
         //yield return new WaitForSeconds(1);
         //FindObjectOfType<AudioManager>().PlayOneShot("BuildingStageOne");
         buildingContainer.transform.DOScale(new Vector3(0, 0, 0), 5);
-        yield return new WaitForSeconds(10);
-        SceneManager.LoadScene("Scene_Buildingsgrowing");
-        
+        yield return new WaitForSeconds(4);
+        Initiate.Fade(Endscene, loadToColor, 1.0f);
+        //SceneManager.LoadScene("Scene_END");  
+
     }
 }
 
-
-//IEnumerator SomeCoroutine()
-//{
-//    Tween myTween = transform.DOMoveX(45, 1);
-//    yield return myTween.WaitForStart();
-//    // This log will happen when the tween starts
-//    Debug.Log("Tween started!");
-//}
 
